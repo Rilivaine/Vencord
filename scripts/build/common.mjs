@@ -134,17 +134,17 @@ export const makeAllPackagesExternalPlugin = {
  * @type {(kind: "web" | "discordDesktop" | "vesktop") => import("esbuild").Plugin}
  */
 export const globPlugins = kind => ({
-    name: "glob-plugins",
+    name: `glob-plugins-${kind}`,
     setup: build => {
         const filter = /^~plugins$/;
         build.onResolve({ filter }, args => {
             return {
-                namespace: "import-plugins",
+                namespace: `import-plugins-${kind}`,
                 path: args.path
             };
         });
 
-        build.onLoad({ filter, namespace: "import-plugins" }, async () => {
+        build.onLoad({ filter, namespace: `import-plugins-${kind}` }, async () => {
             const pluginDirs = ["plugins/_api", "plugins/_core", "plugins", "userplugins"];
             let code = "";
             let pluginsCode = "\n";
